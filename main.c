@@ -76,13 +76,99 @@ int print_bingo(int (*bingom)[N], int (*bingoc)[N]){
 	return 0;
 }
 
+int get_number_byMe(int (*bingom)[N], int (*bingoc)[N]){
+	
+	int count = 0;
+    int num = 0; // 입력된 수를 가리키는 변수 
+    int i = 0, j = 0, k = 0, l = 0; // 반복문을 위한 변수 
+    
+    printf("당신의 선택 : ");
+    scanf("%d", &num);
+    
+    if(num<=N*N && num>=1){
+    	for(i = 0; i<N; i++){
+    		for(j = 0; j<N; j++){
+    			if(bingom[i][j] == num || bingoc[i][j] == num){
+    				for(k = 0; k < N; k++){
+    					for(l = 0; l < N; l++){
+    						if(bingom[k][l]==num){
+    							bingom[k][l] = -1;}
+    						if(bingoc[k][l]==num){
+    							bingoc[k][l] = -1;}	
+						}
+					} // 배열을 한 칸씩 확인하면서 입력된 숫자를 -1로 바꿈  
+				}
+				else {
+					count++;} 
+			}
+		}
+	}
+	else {
+		printf("빙고 범위를 넘어선 숫자 입니다. 다시 입력해 주세요\n");
+		get_number_byMe(bingom, bingoc); // 빙고 숫자의 범위를 넘어서 숫자를 입력할 경우 다시 처음으로 돌아가게 만듬  
+	}
+	if(count == N*N ){
+		printf("이미 입력한 숫자 입니다. 다시 입력해 주세요\n");
+        count = 0;
+        get_number_byMe(bingom, bingoc); // count가 N*N이 될 경우는 배열을 확인할 때 겹치는 숫자가 없었다는 뜻이므로 그 숫자는 이미 입력된 숫자임을 알 수 있음  
+	}
+	
+	return 0;
+}
+
+int get_number_byCom(int (*bingom)[N], int(*bingoc)[N]){
+	
+    int count = 0;
+    int num = 0;
+    int i = 0, j = 0, k = 0, l = 0;
+    
+    num = rand()%(N*N); // 컴퓨터가 랜덤으로 숫자를 출력하게 만듬 
+    
+    if(num<=N*N && num>=1){
+    	for(i = 0; i<N; i++){
+    		for(j = 0; j<N; j++){
+    			if(bingom[i][j] == num || bingoc[i][j] == num){
+    				for(k = 0; k < N; k++){
+    					for(l = 0; l < N; l++){
+    						if(bingom[k][l]==num){
+    							bingom[k][l] = -1;}
+    						if(bingoc[k][l]==num){
+    							bingoc[k][l] = -1;}	
+						}
+					}
+				}
+				else {
+					count++;}
+			}
+		}
+	}
+	else {
+		get_number_byCom(bingom, bingoc);
+	}
+    if(count == N*N ){
+    	count = 0;
+        get_number_byCom(bingom, bingoc); 
+    } // 방식은 get_number_byMe와 동일  
+        
+    printf(" 컴퓨터의 선택 : %d\n", num);
+    
+    return 0;
+} // get_number 함수와 process_bingo 함수를 합침 
+
 
 int main(int argc, char *argv[]) {
 	
 	int bingo_me[N][N]={0};
     int bingo_com[N][N]={0};
     
+    srand(time(NULL)); // 난수를 초기화해주는 함수  
+    
     initiate_bingo(bingo_me, bingo_com);
+    print_bingo(bingo_me, bingo_com);
+    
+    get_number_byMe(bingo_me, bingo_com);
+    print_bingo(bingo_me, bingo_com);
+    get_number_byCom(bingo_me, bingo_com);
     print_bingo(bingo_me, bingo_com);
     
 	return 0;
