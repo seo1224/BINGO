@@ -3,6 +3,7 @@
 #include <time.h> 
 
 #define N 5
+#define M 1 
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
@@ -155,21 +156,132 @@ int get_number_byCom(int (*bingom)[N], int(*bingoc)[N]){
     return 0;
 } // get_number 함수와 process_bingo 함수를 합침 
 
+int count_bingome(int (*bingom)[N]){
+	
+	int countx = 0; // 가로 빙수를 세기 위한 변수  
+    int county = 0; // 세로 빙수를 세기 위한 변수
+    int countzone = 0, countztwo = 0; // countzone은 왼쪽 위- 오른쪽 아래 대각선(왼-오 대각선)을 의미하고 countztwo는 오른쪽 위 - 윈쪽 아래 대각선(오-왼 대각선)을 의미한다  
+    int countbingome = 0; // 총 빙고의 수를 의미하는 변수  
+    int i = 0, j = 0, k = 0, l = 0, m = 0, n = 0;
+    
+    for(i = 0; i < N; i++){
+    	for(j =0; j< N; j++){
+    		if(bingom[i][j] == -1)
+			{
+    			countx++;
+			} //빙고판에 -1로 표현된 칸이 있으면 countx가 1 추가되는 if문  
+    	}
+		if(countx==N){
+			countbingome++;}
+		countx = 0;//  가로 한 줄에 N개의 countx가 존재하면 빙고의 개수가 추가된다는 것을 의미하는 if문  
+	} // 가로 빙고를 찾아내기 위한 for문  
+	
+	for(k = 0; k < N; k++){
+    	for(l =0; l < N; l++){
+    		if(bingom[l][k] == -1)
+			{
+    			county++;
+			}
+    	}
+		if(county==N){
+			countbingome++;}
+		county = 0;
+	}// 세로 빙고를 찾아내기 위한 for문, 방식은 가로 빙고 찾는 방법과 동일  
+	
+	for(m = 0; m < N; m++){
+		if(bingom[m][m] == -1){
+			countzone++;} // bingm [n][n]은 왼-오 대각선을 의미 
+	}
+	if(countzone == N)
+		countbingome++;
+		countzone = 0;
+    //왼-오 대각선 빙고를 찾아내기 위한 for문과 if문 
+	 
+    for(n = 0; n < N; n++){
+		if(bingom[n][N-n-1] == -1){
+			countztwo++;}// bingm [n][N-n-1]은 왼-오 대각선을 의미 
+	}
+	if(countztwo == N)
+		countbingome++;
+		countztwo = 0;
+	//오-윈 대각선 빙고를 찾아내기 위한 for문과 if문 
+// 사용자 빙고판에 빙고가 몇 개인지 세는 함수
+	return countbingome;
+}
+
+int count_bingocom(int (*bingoc)[N]){
+	
+	int countx = 0;
+    int county = 0;
+    int countzone = 0, countztwo = 0; // countzone은 왼쪽 위- 오른쪽 아래 대각선을 의미하고 countztwo는 오른쪽 위 - 윈쪽 아래 대각선을 의미한다  
+    int countbingocom = 0;
+    int i = 0, j = 0, k = 0, l = 0, m = 0, n = 0;
+    
+    for(i = 0; i < N; i++){
+    	for(j =0; j< N; j++){
+    		if(bingoc[i][j] == -1)
+				countx++;
+			}
+		if(county==N){
+			countbingocom++;}
+		countx = 0;
+	}
+	
+	for(k = 0; k < N; k++){
+    	for(l = 0; l < N; l++){
+    		if(bingoc[l][k] == -1)
+			    county++;
+    	}
+		if(county==N){
+			countbingocom++;}
+		county = 0;
+	}
+	
+	for(m = 0; m < N; m++){
+		if(bingoc[m][m] == -1){
+			countzone++;}
+	}
+	if(countzone == N)
+		countbingocom++;
+	countzone = 0;
+    
+    for(n = 0; n < N; n++){
+		if(bingoc[n][N-n-1] == -1){
+			countztwo++;}
+	}
+	if(countztwo == N)
+		countbingocom++;
+	countztwo = 0;
+		
+// 사용자 빙고판에 빙고가 몇 개인지 세는 함수, 방식은 count_bingome 와 동일  
+	return countbingocom;
+}
+
 
 int main(int argc, char *argv[]) {
 	
 	int bingo_me[N][N]={0};
     int bingo_com[N][N]={0};
-    
-    srand(time(NULL)); // 난수를 초기화해주는 함수  
-    
+    int turn = 1;
+
+    srand(time(NULL));
+
     initiate_bingo(bingo_me, bingo_com);
     print_bingo(bingo_me, bingo_com);
-    
-    get_number_byMe(bingo_me, bingo_com);
-    print_bingo(bingo_me, bingo_com);
+   
+    while(count_bingome(bingo_me) != M || count_bingocom(bingo_com) != M){
+    	get_number_byMe(bingo_me, bingo_com);
+    	print_bingo(bingo_me, bingo_com);
+        printf("현재 빙고의 개수는 당신이 %d개, 컴퓨터가 %d개 이며 %d 턴째입니다.\n", count_bingome(bingo_me), count_bingocom(bingo_com),turn);
+        turn++;
+    if(count_bingome(bingo_me)==M || count_bingocom(bingo_com)==M){
+    	break;}
+
     get_number_byCom(bingo_me, bingo_com);
     print_bingo(bingo_me, bingo_com);
-    
-	return 0;
+	printf("현재 빙고의 개수는 당신이 %d개, 컴퓨터가 %d개 이며 %d 턴째입니다.\n", count_bingome(bingo_me), count_bingocom(bingo_com),turn);
+    turn++;
+   }   
+
+    return 0;
 }
