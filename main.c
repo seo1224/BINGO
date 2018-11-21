@@ -260,28 +260,43 @@ int count_bingocom(int (*bingoc)[N]){
 
 int main(int argc, char *argv[]) {
 	
-	int bingo_me[N][N]={0};
-    int bingo_com[N][N]={0};
-    int turn = 1;
+	int bingo_me[N][N]={0};  
+    int bingo_com[N][N]={0}; 
+    // 빙고판 초기화  
+    int turn = 1; // 몇번째 턴에 승부가 결정되는지 명시하기 위한 변수  
 
-    srand(time(NULL));
+    srand(time(NULL)); // 난수를 최기화 시키는 함수  
 
     initiate_bingo(bingo_me, bingo_com);
     print_bingo(bingo_me, bingo_com);
    
     while(count_bingome(bingo_me) != M || count_bingocom(bingo_com) != M){
+    	
     	get_number_byMe(bingo_me, bingo_com);
     	print_bingo(bingo_me, bingo_com);
         printf("현재 빙고의 개수는 당신이 %d개, 컴퓨터가 %d개 이며 %d 턴째입니다.\n", count_bingome(bingo_me), count_bingocom(bingo_com),turn);
         turn++;
+        
     if(count_bingome(bingo_me)==M || count_bingocom(bingo_com)==M){
-    	break;}
+        break;} // 사용자의 턴에서 M을 만족하는 경우를 대비한다  
 
-    get_number_byCom(bingo_me, bingo_com);
-    print_bingo(bingo_me, bingo_com);
-	printf("현재 빙고의 개수는 당신이 %d개, 컴퓨터가 %d개 이며 %d 턴째입니다.\n", count_bingome(bingo_me), count_bingocom(bingo_com),turn);
-    turn++;
-   }   
+        get_number_byCom(bingo_me, bingo_com);
+        print_bingo(bingo_me, bingo_com);
+	    printf("현재 빙고의 개수는 당신이 %d개, 컴퓨터가 %d개 이며 %d 턴째입니다.\n", count_bingome(bingo_me), count_bingocom(bingo_com),turn);
+        turn++;
+   } // 두 빙고판중 하나가 빙고의 개수 M을 만족할 때까지 {}를 반복하는 while문 
+   
+    if(count_bingome(bingo_me) == M || count_bingocom(bingo_com) == M){
+    	if(count_bingome(bingo_me) == M && count_bingocom(bingo_com) != M){
+            printf("이 turn에서 당신의 승리!");
+            }// 사용자의 빙고판만 M을 만족하는 경우 
+        if(count_bingocom(bingo_com) == M && count_bingome(bingo_me) != M){
+            printf("이 turn에서 컴퓨터의 승리!");
+            }// 컴퓨터의 빙고판만 M을 만족하는 경우 
+        if(count_bingome(bingo_me) == M && count_bingocom(bingo_com) == M){
+        	printf("이 turn에서 무승부!");
+		}// 둘다 M을 만족하는 경우 
+      }   
 
     return 0;
 }
