@@ -3,7 +3,7 @@
 #include <time.h> 
 
 #define N 5
-#define M 1 
+#define M 12
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
@@ -222,7 +222,7 @@ int count_bingocom(int (*bingoc)[N]){
     		if(bingoc[i][j] == -1)
 				countx++;
 			}
-		if(county==N){
+		if(countx == N){
 			countbingocom++;}
 		countx = 0;
 	}
