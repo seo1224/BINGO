@@ -3,7 +3,7 @@
 #include <time.h> 
 
 #define N 5
-#define M 12
+#define M 3
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
@@ -67,12 +67,10 @@ int print_bingo(int (*bingom)[N], int (*bingoc)[N]){
 	}
 	printf("\n");
 	
-	for(i = 0; i < N; i++){
-		for(j = 0; j< N; j++){
-			printf("|  %2d  |", bingoc[i][j]); 
-		}
-		printf("\n");
-	} // 완성된 프로그램에서 지울 것임  
+	//for(i = 0; i < N; i++){
+		//for(j = 0; j< N; j++){
+			//printf("|  %2d  |", bingoc[i][j]); }
+		//printf("\n");} // 완성된 프로그램에서 지울 것임  
 	
 	return 0;
 }
@@ -150,8 +148,8 @@ int get_number_byCom(int (*bingom)[N], int(*bingoc)[N]){
     	count = 0;
         get_number_byCom(bingom, bingoc); 
     } // 방식은 get_number_byMe와 동일  
-        
-    printf(" 컴퓨터의 선택 : %d\n", num);
+     
+    printf("컴퓨터의 선택 : %d\n", num);
     
     return 0;
 } // get_number 함수와 process_bingo 함수를 합침 
